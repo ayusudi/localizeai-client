@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: Inter;
+}
+
+.page {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.splash {
+  opacity: 1;
+  animation: moveUp 3.5s; /* Default for larger screens */
+  animation-fill-mode: forwards;
+  position: absolute;
+  transform: translateY(0); /* Initial position */
+}
+
+@keyframes moveUp {
+  from {
+    transform: translateY(0); /* Start at its current position */
+  }
+  to {
+    transform: translateY(-100vh); /* Move up by 100px, adjust as needed */
+  }
+}
+
+/* For mobile devices, adjust the animation duration to 3 seconds */
+@media (max-width: 768px) {
+  .splash {
+    opacity: 1;
+    animation: moveUp 2s; /* Default for larger screens */
+    animation-fill-mode: forwards;
+    position: absolute;
+    transform: translateY(0); /* Initial position */
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.swiper {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px !important;
+}
+
+.key-1 {
+  transform: rotate(-4deg); /* Rotate 4 degrees */
+  margin-top: 100px;
+}
+
+.key-2 {
+  transform: rotate(0deg); /* No rotation or some other transformation */
+}
+
+.key-3 {
+  transform: rotate(4deg); /* Rotate -4 degrees */
+  margin-top: 100px;
+}
