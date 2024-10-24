@@ -15,6 +15,7 @@ export default {
       "primary-50": "#FFF7F7",
       "primary-100": "#FFE1DE",
       white: "#FFFFFF",
+      danger: "#900B09",
     },
     fontSize: {
       "2xl": [

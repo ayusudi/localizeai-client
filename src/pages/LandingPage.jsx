@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSpring, animated } from "react-spring";
 import Card from "../components/Card";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
   const [cardKeys, setCardKeys] = useState(new Array(12).fill(false)); // Initialize keys for each card
@@ -8,7 +9,7 @@ export default function LandingPage() {
   const containerRef = useRef(null); // Reference to the scroll container
   const directionRef = useRef(1); // Direction of scrolling (1 = right, -1 = left)
   const [isScrolling, setIsScrolling] = useState(true); // State to control scrolling
-
+  const navigate = useNavigate();
   // Effect to detect mobile screen size
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)"); // Adjust the breakpoint as needed
@@ -149,7 +150,10 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="flex flex-col items-center gap-2 md:gap-3">
-            <button className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary">
+            <button
+              onClick={() => navigate("/register")}
+              className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
+            >
               Login with Google
             </button>
             <button className="text-heading-md w-80 py-2.5 px-3 rounded-full text-primary bg-primary-50">
