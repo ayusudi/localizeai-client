@@ -1,7 +1,9 @@
 import { TextInput } from "flowbite-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
   const [greeting, setGreeting] = useState(true);
   return (
     <div>
@@ -58,7 +60,7 @@ export default function RegisterPage() {
           </div>
           <div className="my-12 mx-auto">
             <button
-              onClick={() => setGreeting(false)}
+              onClick={() => navigate("/places")}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
             >
               Confirm Username

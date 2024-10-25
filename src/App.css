@@ -14,7 +14,7 @@
 
 .splash {
   opacity: 1;
-  animation: moveUp 3.5s; /* Default for larger screens */
+  animation: moveUp 3s; /* Default for larger screens */
   animation-fill-mode: forwards;
   position: absolute;
   transform: translateY(0); /* Initial position */

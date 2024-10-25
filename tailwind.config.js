@@ -8,12 +8,14 @@ export default {
       primary: "#FF695B",
       "primary-50": "#FFF7F7",
       "primary-100": "#FFE1DE",
+      secondary: "#757575",
       white: "#FFFFFF",
     },
     colors: {
       primary: "#FF695B",
       "primary-50": "#FFF7F7",
       "primary-100": "#FFE1DE",
+      secondary: "#757575",
       white: "#FFFFFF",
       danger: "#900B09",
     },
@@ -136,7 +138,10 @@ export default {
         },
       ],
     },
-    extends: {
+    extend: {
+      backgroundImage: {
+        redwhite: "linear-gradient(0deg, #FFF 75%, #FFE1DE 100%)",
+      },
       height: {
         50: "200px",
       },

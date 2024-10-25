@@ -35,20 +35,20 @@ const router = createBrowserRouter([
         path: "register",
         element: <RegisterPage />,
       },
-      // {
-      //   path: "places",
-      //   element: <Layout />,
-      //   children: [
-      //     {
-      //       path: "",
-      //       element: <SearchPage />,
-      //     },
-      //     {
-      //       path: "explore",
-      //       element: <ExplorePage />,
-      //     },
-      //   ],
-      // },
+      {
+        path: "places",
+        element: <Layout />,
+        children: [
+          {
+            path: "",
+            element: <SearchPage />,
+          },
+          {
+            path: "explore",
+            element: <ExplorePage />,
+          },
+        ],
+      },
       // {
       //   path: "places/:slug",
       //   element: <Layout />,
