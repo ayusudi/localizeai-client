@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSpring, animated } from "react-spring";
+import { animated } from "react-spring";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
 
 export default function LandingPage() {
   const [cardKeys, setCardKeys] = useState(new Array(12).fill(false)); // Initialize keys for each card
@@ -86,9 +92,11 @@ export default function LandingPage() {
   };
 
   useEffect(() => {
-    const interval = isScrolling ? setInterval(autoScroll, 50) : null; // Control scrolling with interval
-    return () => clearInterval(interval); // Clean up interval
-  }, [isScrolling]);
+    if (!isMobile) {
+      const interval = isScrolling ? setInterval(autoScroll, 50) : null; // Control scrolling with interval
+      return () => clearInterval(interval); // Clean up interval
+    }
+  }, [isScrolling, isMobile]);
 
   const handleMouseEnter = () => {
     setIsScrolling(false); // Stop scrolling on hover
@@ -106,39 +114,55 @@ export default function LandingPage() {
         </div>
       )}
       <div className="page overflow-hidden flex flex-col">
-        <div
-          ref={containerRef}
-          onScroll={handleScroll}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          className="flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
-        >
-          {new Array(12).fill("").map((el, i) => {
-            const cardKey = cardKeys[i];
-            const rotation = isMobile
-              ? cardKey === false
-                ? 0
-                : cardKey.toFixed(1)
-              : 0;
+        {isMobile ? (
+          <div className="md:hidden py-3 bg-gradient-to-t from-white to-[#FFB8B2]">
+            <Swiper
+              effect={"coverflow"}
+              grabCursor={true}
+              centeredSlides={true}
+              slidesPerView={"auto"}
+              coverflowEffect={{
+                rotate: 10,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                scale: 0.8,
+                slideShadows: false,
+              }}
+              pagination={false}
+              modules={[EffectCoverflow, Pagination]}
+              className="mySwiper"
+            >
+              {new Array(9).fill("").map((el, i) => (
+                <SwiperSlide key={i}>
+                  <Card />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ) : (
+          <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="hidden md:flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
+          >
+            {new Array(12).fill("").map((el, i) => {
+              const cardKey = cardKeys[i];
 
-            // Ensure rotation is a number for the animation
-            const props = useSpring({
-              transform: isMobile ? `rotate(${rotation}deg)` : "rotate(0deg)",
-              config: { tension: 200, friction: 10 },
-              from: { transform: "rotate(0deg)" }, // Start from 0 degrees
-            });
+              return (
+                <animated.div
+                  key={i}
+                  className={`w-fit transition-transform duration-50 ease-out`}
+                >
+                  <Card cardKey={isMobile ? cardKey : 0} />
+                </animated.div>
+              );
+            })}
+          </div>
+        )}
 
-            return (
-              <animated.div
-                key={i}
-                style={props}
-                className={`w-fit transition-transform duration-50 ease-out`}
-              >
-                <Card cardKey={isMobile ? cardKey : 0} />
-              </animated.div>
-            );
-          })}
-        </div>
         <div className="flex flex-col items-center justify-center gap-4 md:gap-5 my-6 md:flex-grow ">
           <div className="flex flex-col items-center gap-2">
             <h3 className="text-sm md:text-md text-center w-4/6 md:w-full">
