@@ -9,6 +9,8 @@ export default {
       "primary-50": "#FFF7F7",
       "primary-100": "#FFE1DE",
       secondary: "#757575",
+      tertiary: "#14AE5C",
+      "tertiary-50": "#EBFFEE",
       white: "#FFFFFF",
     },
     colors: {
@@ -16,6 +18,8 @@ export default {
       "primary-50": "#FFF7F7",
       "primary-100": "#FFE1DE",
       secondary: "#757575",
+      tertiary: "#14AE5C",
+      "tertiary-50": "#EBFFEE",
       white: "#FFFFFF",
       danger: "#900B09",
     },

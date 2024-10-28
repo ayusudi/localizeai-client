@@ -7,9 +7,12 @@ import LandingPage from "./pages/LandingPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import SearchPage from "./pages/PlacesPage/SearchPage.jsx";
 import ExplorePage from "./pages/PlacesPage/ExplorePage.jsx";
-import DetailPage from "./pages/DetailPage.jsx";
+import DetailPage from "./pages/DetailPage/DetailPage.jsx";
 import Layout from "./pages/PlacesPage/Layout.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import SearchResultPage from "./pages/SearchResultPage.jsx";
+import LayoutDetail from "./pages/DetailPage/Layout.jsx";
+import ReviewPage from "./pages/DetailPage/ReviewPage.jsx";
 
 //  /
 //  /register
@@ -49,20 +52,24 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // {
-      //   path: "places/:slug",
-      //   element: <Layout />,
-      //   children: [
-      //     {
-      //       path: "",
-      //       element: <DetailPage />,
-      //     },
-      //     {
-      //       path: "places/:slug/review",
-      //       element: <PlacePage />,
-      //     },
-      //   ],
-      // },
+      {
+        path: "places/search",
+        element: <SearchResultPage />,
+      },
+      {
+        path: "places/:id",
+        element: <LayoutDetail />,
+        children: [
+          {
+            path: "",
+            element: <DetailPage />,
+          },
+          {
+            path: "review",
+            element: <ReviewPage />,
+          },
+        ],
+      },
       // {
       //   path: "places/:slug/write-review",
       //   element: <PlacePage />,

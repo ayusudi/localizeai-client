@@ -1,7 +1,9 @@
 import { useState } from "react";
 import SwitchIcon from "../../components/SwitchIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchPage() {
+  const navigate = useNavigate();
   const [checkStatus, setCheckStatus] = useState(false);
   return (
     <div className="flex flex-col flex-grow">
@@ -64,9 +66,14 @@ export default function SearchPage() {
               <input id="dropzone-file" type="file" className="hidden" />
             </form>
           ) : (
-            <form className="m-auto h-40 w-5/6 max-w-[360px]">
+            <form
+              action="/places/search"
+              method="get"
+              className="m-auto h-40 w-5/6 max-w-[360px]"
+            >
               <div className="flex items-center border rounded-full p-1">
                 <input
+                  name="q"
                   className="flex-grow !outline-none ring-0 border-0 focus:!outline-none !ring-white focus:ring-offset-0"
                   type="text"
                   placeholder="Type in what you're looking for"
