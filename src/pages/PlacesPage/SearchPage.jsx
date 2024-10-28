@@ -6,7 +6,7 @@ export default function SearchPage() {
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex-1 flex flex-col items-center justify-center gap-2">
-        <div className="text-lg mb-4">🔎</div>
+        <div className="text-lg mb-2.5">🔎</div>
         <h3 className="text-sm">Find Your Perfect Spot</h3>
         <p className="text-body-lg">Discover the best places for you</p>
         <div>
@@ -49,8 +49,52 @@ export default function SearchPage() {
             handleToggle={(state) => setCheckStatus(state)}
           />
         </div>
+        <div className="w-full ">
+          {checkStatus ? (
+            <form className="m-auto h-40 w-5/6 max-w-[360px] border rounded-xl flex flex-col justify-center gap-3 sm:gap-2.5 items-center">
+              <p className="text-body-lg text-gray-500 w-10/12 text-center">
+                Upload an image, and we'll help find similar places.
+              </p>
+              <label
+                for="dropzone-file"
+                className="w-5/6 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
+              >
+                Upload an Image
+              </label>
+              <input id="dropzone-file" type="file" className="hidden" />
+            </form>
+          ) : (
+            <form className="m-auto h-40 w-5/6 max-w-[360px]">
+              <div className="flex items-center border rounded-full p-1">
+                <input
+                  className="flex-grow !outline-none ring-0 border-0 focus:!outline-none !ring-white focus:ring-offset-0"
+                  type="text"
+                  placeholder="Type in what you're looking for"
+                />
+                <button
+                  type="submit"
+                  className="h-10 w-10 bg-primary rounded-full flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="23"
+                    viewBox="0 0 22 23"
+                    fill="none"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M10 0.75C4.61522 0.75 0.25 5.11522 0.25 10.5C0.25 15.8848 4.61522 20.25 10 20.25C12.4224 20.25 14.6385 19.3666 16.3437 17.9043L20.4697 22.0303C20.7626 22.3232 21.2374 22.3232 21.5303 22.0303C21.8232 21.7374 21.8232 21.2626 21.5303 20.9697L17.4043 16.8437C18.8666 15.1385 19.75 12.9224 19.75 10.5C19.75 5.11522 15.3848 0.75 10 0.75ZM1.75 10.5C1.75 5.94365 5.44365 2.25 10 2.25C14.5563 2.25 18.25 5.94365 18.25 10.5C18.25 15.0563 14.5563 18.75 10 18.75C5.44365 18.75 1.75 15.0563 1.75 10.5Z"
+                      fill="#FEFEFE"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
-      <div className="flex-1"></div>
     </div>
   );
 }
