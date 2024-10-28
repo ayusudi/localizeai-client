@@ -21,7 +21,7 @@ export default function RegisterPage() {
               </p>
             </div>
           </div>
-          <div className="my-12 bg-white mx-auto">
+          <div className="my-20 bg-white mx-auto">
             <button
               onClick={() => setGreeting(false)}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
