@@ -8,7 +8,7 @@ export default function RegisterPage() {
   return (
     <div>
       {greeting ? (
-        <div className="h-screen flex flex-col justify-center w-full">
+        <div className="page flex flex-col justify-center w-full">
           <div className="flex-grow flex flex-col gap-10 bg-gradient-to-t from-white to-[#FFB8B2] items-center justify-center">
             <img
               className="rounded-full w-32 h-32 object-cover"
@@ -21,7 +21,7 @@ export default function RegisterPage() {
               </p>
             </div>
           </div>
-          <div className="my-20 bg-white mx-auto">
+          <div className="h-50 flex flex-col items-center justify-center bg-white mx-auto">
             <button
               onClick={() => setGreeting(false)}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
@@ -32,7 +32,7 @@ export default function RegisterPage() {
         </div>
       ) : (
         <div className="page flex flex-col justify-center w-full">
-          <div className="flex-grow flex flex-col gap-2.5 px-5 py-2.5 ">
+          <div className="flex-grow flex flex-col gap-3 px-5 py-6 ">
             <button
               onClick={() => setGreeting(true)}
               className="h-12 w-12 mb-2 rounded-full border-[#D9D9D9] border flex justify-center items-center"
@@ -58,7 +58,7 @@ export default function RegisterPage() {
               />
             </form>
           </div>
-          <div className="my-12 mx-auto">
+          <div className="h-50 flex flex-col items-center justify-center">
             <button
               onClick={() => navigate("/places")}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
