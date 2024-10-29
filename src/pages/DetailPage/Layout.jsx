@@ -9,9 +9,7 @@ export default function Layout() {
     location.pathname.split("/").length === 3 ? false : true
   );
   const changePage = () => {
-    console.log("HAII");
     setCheckStatus(!checkStatus);
-    console.log(location.pathname.split("/"));
     if (location.pathname.split("/").length === 3)
       navigate("/places/123/review");
     else navigate("/places/123");
