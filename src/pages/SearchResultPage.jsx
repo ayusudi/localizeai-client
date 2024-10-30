@@ -1,8 +1,88 @@
-import { useNavigate } from "react-router-dom";
-import Card from "../components/Card";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+
+import { Carousel } from "flowbite-react";
+import { useEffect, useState } from "react";
+function Card() {
+  return (
+    <div className="card overflow-hidden w-11/12  max-w-[380px] outline bg-white outline-primary-50 outline-2 rounded-2xl">
+      <div className="pl-4 py-5">
+        <h3 className="mb-2 text-heading-lg">Jakarta Brew</h3>
+        <p className="mb-3 text-body-lg">Sudirman, Jakarta Selatan</p>
+        <div className="overflow-x-auto flex gap-1 no-scrollbar">
+          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
+            <p className="text-heading-sm text-primary text-nowrap cursor-default">
+              Work-Friendly
+            </p>
+          </div>
+          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
+            <p className="text-heading-sm text-primary text-nowrap">
+              Classic Vibes
+            </p>
+          </div>
+          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
+            <p className="text-heading-sm text-primary text-nowrap">
+              Hidden Gem
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="h-50">
+        <Carousel
+          pauseOnHover
+          theme={{
+            scrollContainer: {
+              base: "flex h-full snap-mandatory overflow-y-hidden overflow-x-scroll scroll-smooth rounded-none",
+              snap: "snap-x",
+            },
+            control: { base: "hidden" },
+            indicators: {
+              active: {
+                off: "bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
+                on: "bg-white dark:bg-gray-800",
+              },
+              base: "h-2 w-2 rounded-full",
+              wrapper:
+                "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-2",
+            },
+          }}
+        >
+          <img
+            src="/cafe-placeholder.png"
+            alt="cafe-jakarta-brew"
+            className="relative"
+          />
+          <img
+            src="/cafe-placeholder.png"
+            alt="cafe-jakarta-brew"
+            className="relative"
+          />
+          <img
+            src="/cafe-placeholder.png"
+            alt="cafe-jakarta-brew"
+            className="relative"
+          />
+          <img
+            src="/cafe-placeholder.png"
+            alt="cafe-jakarta-brew"
+            className="relative"
+          />
+        </Carousel>
+      </div>
+    </div>
+  );
+}
 
 export default function SearchResultPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const [isNotFound, setIsNotFound] = useState(false);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const paramValue = searchParams.get("q"); // replace 'yourParam' with your actual query param name
+    if (paramValue && paramValue.toLowerCase().includes("not")) {
+      setIsNotFound(true);
+    }
+  }, []);
   return (
     <div>
       <div className="flex flex-col page py-6">
@@ -78,15 +158,48 @@ export default function SearchResultPage() {
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 p-3 md:items-start items-center justify-center">
-          {new Array(16).fill("").map((el, i) => {
-            return (
-              <div key={i} onClick={() => navigate("/places/" + i)}>
-                <Card />
+        {isNotFound ? (
+          <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-4 py-5 md:p-6 md:items-start items-center md:justify-center">
+            <div className="flex flex-col max-w-[380px] w-11/12 bg-white rounded-xl overflow-hidden aspect-[353/374] h-auto">
+              <img
+                src="/map.png"
+                alt="map"
+                className="w-full aspect-3/2 object-cover"
+              />
+              <div className="py-3 px-4 md:p-4 flex flex-col justify-around flex-1">
+                <div className="flex flex-col justify-center ">
+                  <h2 className="text-heading-lg">No Place Found</h2>
+                  <p className="text-body-lg">
+                    We couldn't find any places matching your search.
+                  </p>
+                </div>
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={() => navigate("/places/123/write-review")}
+                    for="dropzone-file"
+                    className="w-full text-heading-md md:p-3 p-2.5 rounded-full text-white bg-primary text-center"
+                  >
+                    Add Your Review
+                  </button>
+                </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-4 py-5 md:p-6 md:items-start items-center justify-center md:grid md:grid-cols-4">
+            {new Array(16).fill("").map((el, i) => {
+              return (
+                <div
+                  className="flex items-center justify-center"
+                  key={i}
+                  onClick={() => navigate("/places/123")}
+                >
+                  <Card />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -113,9 +113,9 @@ export default function LandingPage() {
           <img src="logo-text.png" className="m-auto " />
         </div>
       )}
-      <div className="page overflow-hidden flex flex-col">
+      <div className="page overflow-hidden flex flex-col ">
         {isMobile ? (
-          <div className="md:hidden py-3 bg-gradient-to-t from-white to-[#FFB8B2]">
+          <div className="md:hidden py-3 bg-gradient-to-t from-white to-[#FFB8B2] flex-1 justify-center items-center flex ">
             <Swiper
               effect={"coverflow"}
               grabCursor={true}
@@ -163,7 +163,7 @@ export default function LandingPage() {
           </div>
         )}
 
-        <div className="flex flex-col items-center justify-center gap-4 md:gap-5 my-6 md:flex-grow ">
+        <div className="flex flex-col items-center justify-center gap-4 md:gap-5 my-6 md:flex-grow flex-1">
           <div className="flex flex-col items-center gap-2">
             <h3 className="text-sm md:text-md text-center w-4/6 md:w-full">
               Discover Cafes and Create Moments

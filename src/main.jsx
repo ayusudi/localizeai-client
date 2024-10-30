@@ -9,10 +9,13 @@ import SearchPage from "./pages/PlacesPage/SearchPage.jsx";
 import ExplorePage from "./pages/PlacesPage/ExplorePage.jsx";
 import DetailPage from "./pages/DetailPage/DetailPage.jsx";
 import Layout from "./pages/PlacesPage/Layout.jsx";
-import ProfilePage from "./pages/ProfilePage.jsx";
+import WritePage from "./pages/WritePage.jsx";
 import SearchResultPage from "./pages/SearchResultPage.jsx";
 import LayoutDetail from "./pages/DetailPage/Layout.jsx";
 import ReviewPage from "./pages/DetailPage/ReviewPage.jsx";
+import SuccessPage from "./pages/SuccessPage.jsx";
+import NewPlacePage from "./pages/NewPlacePage.jsx";
+import FailedPage from "./pages/FailedPage.jsx";
 
 //  /
 //  /register
@@ -57,6 +60,14 @@ const router = createBrowserRouter([
         element: <SearchResultPage />,
       },
       {
+        path: "places/new",
+        element: <NewPlacePage />,
+      },
+      {
+        path: "places/failed",
+        element: <FailedPage />,
+      },
+      {
         path: "places/:id",
         element: <LayoutDetail />,
         children: [
@@ -70,10 +81,15 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // {
-      //   path: "places/:slug/write-review",
-      //   element: <PlacePage />,
-      // },
+
+      {
+        path: "places/:slug/write-review",
+        element: <WritePage />,
+      },
+      {
+        path: "places/:slug/write-success",
+        element: <SuccessPage />,
+      },
       // {
       //   path: "profile",
       //   element: <ProfilePage />,

@@ -59,7 +59,7 @@ export default function ReviewPage() {
   return (
     <div>
       <div className="flex flex-col gap-2 py-2.5">
-        <div className="overflow-x-auto flex gap-1 no-scrollbar px-6 ">
+        <div className="overflow-x-auto flex gap-1 no-scrollbar px-5 ">
           <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
             <p className="text-heading-sm text-primary text-nowrap cursor-default">
               All
@@ -81,7 +81,7 @@ export default function ReviewPage() {
             <p className="text-heading-sm text-secondary text-nowrap">1⭐</p>
           </div>
         </div>
-        <div className="overflow-x-auto flex gap-1 no-scrollbar px-6 ">
+        <div className="overflow-x-auto flex gap-1 no-scrollbar px-5 ">
           <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
             <p className="text-heading-sm text-primary text-nowrap cursor-default">
               Work-Friendly

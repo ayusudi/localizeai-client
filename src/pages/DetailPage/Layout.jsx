@@ -1,7 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import SwitchSearchExplore from "../../components/SwitchSearchExplore";
 import SwitchOverview from "../../components/SwitchOverview";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 export default function Layout() {
   let location = useLocation();
   const navigate = useNavigate();
