@@ -70,8 +70,9 @@ export default function RegisterPage() {
             <img
               className="rounded-full w-32 h-32 object-cover"
               src={
+                localStorage.getItem("access_token") ? 
                 "https://images.weserv.nl/?url=" +
-                localStorage.getItem("profile")
+                localStorage.getItem("profile") : "/default.png"
               }
               alt="User Profile"
             />

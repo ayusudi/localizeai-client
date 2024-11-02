@@ -22,7 +22,11 @@ export default function Layout() {
       />
       <img
         className="absolute top-6 rounded-full w-11 h-11 object-cover right-4"
-        src={"https://images.weserv.nl/?url=" + localStorage.getItem("profile")}
+        src={
+          localStorage.getItem("access_token") ? 
+          "https://images.weserv.nl/?url=" +
+          localStorage.getItem("profile") : "/default.png"
+        }
       />
       <Outlet />
     </div>
