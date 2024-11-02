@@ -2,7 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect,
+} from "react-router-dom";
 import LandingPage from "./pages/LandingPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import SearchPage from "./pages/PlacesPage/SearchPage.jsx";
@@ -36,10 +40,31 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <LandingPage />,
+        loader: () => {
+          if (localStorage.getItem("access_token")) {
+            if (localStorage.getItem("status_username") === "true") {
+              return redirect("/places");
+            } else {
+              return redirect("/register");
+            }
+          }
+          return null
+        }
       },
       {
         path: "register",
         element: <RegisterPage />,
+        loader: () => {
+          if (localStorage.getItem("access_token")) {
+            if (localStorage.getItem("status_username") === "true") {
+              return redirect("/places");
+            } else {
+              return null;
+            }
+          } else {
+            return redirect("/places");
+          }
+        },
       },
       {
         path: "places",
@@ -62,6 +87,16 @@ const router = createBrowserRouter([
       {
         path: "places/new",
         element: <NewPlacePage />,
+        loader: () => {
+          if (localStorage.getItem("access_token")) {
+            if (localStorage.getItem("status_username") === "true") {
+              return null
+            } else {
+              return redirect("/register");
+            }
+          }
+          return redirect("/");
+        }
       },
       {
         path: "places/failed",
@@ -85,6 +120,16 @@ const router = createBrowserRouter([
       {
         path: "places/:slug/write-review",
         element: <WritePage />,
+        loader: () => {
+          if (localStorage.getItem("access_token")) {
+            if (localStorage.getItem("status_username") === "true") {
+              return null
+            } else {
+              return redirect("/register");
+            }
+          }
+          return redirect("/");
+        }
       },
       {
         path: "places/:slug/write-success",

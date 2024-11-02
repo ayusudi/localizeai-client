@@ -1,10 +1,67 @@
 import { TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
+import axios from "axios";
 
 export default function RegisterPage() {
+  const baseUrl = "https://localizeai-server-da6245e547aa.herokuapp.com";
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState(true);
+  const [isFetchDone, setIsFetchDone] = useState(false);
+  const [username, setUsername] = useState("");
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+
+  // Debounce function that triggers the API call
+  const checkUsername = useCallback(
+    debounce(async (input) => {
+      try {
+        setIsFetchDone(false);
+        const { data } = await axios(`${baseUrl}/users/${input}`);
+        setIsFetchDone(true);
+        if (data.message === "NOT_FOUND") {
+          setIsUsernameTaken(false);
+        } else {
+          setIsUsernameTaken(true);
+        }
+      } catch (error) {
+        console.error("Error checking username:", error);
+      }
+    }, 2000), // 2-second debounce
+    []
+  );
+
+  const [isValid, setIsValid] = useState(true);
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    const valid = /^[a-zA-Z0-9_]*$/.test(inputValue);
+
+    setIsValid(valid);
+    if (valid) {
+      setUsername(inputValue);
+      checkUsername(inputValue);
+    } else {
+      setUsername(inputValue); // Keeps track of the input but won't trigger the API call
+    }
+  };
+
+  const confirmUsername = async (e) => {
+    e.preventDefault();
+    if (isFetchDone && !isUsernameTaken) {
+      let { data } = await axios({
+        url: baseUrl + "/users/" + username,
+        method: "PATCH",
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      });
+      localStorage.setItem("username", data.user.username);
+      localStorage.setItem("status_username", true);
+      navigate("/places");
+    }
+  };
+
   return (
     <div>
       {greeting ? (
@@ -12,10 +69,16 @@ export default function RegisterPage() {
           <div className="flex-grow flex flex-col gap-10 bg-gradient-to-t from-white to-[#FFB8B2] items-center justify-center">
             <img
               className="rounded-full w-32 h-32 object-cover"
-              src="https://static.standard.co.uk/2021/12/02/17/Guy20Berryman_Image20courtesy20of20Applied20Art20Forms.jpg?width=1200&auto=webp&quality=75&crop=5:3,smart"
+              src={
+                "https://images.weserv.nl/?url=" +
+                localStorage.getItem("profile")
+              }
+              alt="User Profile"
             />
             <div className="flex flex-col gap-2.5">
-              <h3 className="text-sm text-center">Hi, Daniasyrofi! 👋</h3>
+              <h3 className="text-sm text-center">
+                Hi, {localStorage.getItem("name")}! 👋
+              </h3>
               <p className="text-body-lg text-center">
                 Let's set up your profile to get started.
               </p>
@@ -31,7 +94,10 @@ export default function RegisterPage() {
           </div>
         </div>
       ) : (
-        <div className="page flex flex-col justify-center w-full">
+        <form
+          onSubmit={confirmUsername}
+          className="page flex flex-col justify-center w-full"
+        >
           <div className="flex-grow flex flex-col gap-3 px-5 py-6 ">
             <button
               onClick={() => setGreeting(true)}
@@ -43,30 +109,63 @@ export default function RegisterPage() {
             <p className="text-body-lg">
               Pick a unique username to personalize your experience.
             </p>
-            <form className="mt-2.5" action="" method="get">
+            <div className="mt-2.5">
               <TextInput
-                theme={{ field: { input: { sizes: { md: "text-body-lg" } } } }}
+                maxLength={12}
+                theme={{
+                  field: { input: { sizes: { md: "text-body-lg" } } },
+                }}
                 id="username"
                 type="text"
                 placeholder="Enter your username"
                 required
+                onChange={handleChange}
+                color={
+                  isFetchDone
+                    ? isUsernameTaken
+                      ? "failure"
+                      : "success"
+                    : "gray"
+                }
                 helperText={
-                  <p className="!text-body-md text-danger">
-                    This username is already taken.
-                  </p>
+                  !isValid ? (
+                    <span className="!text-body-md text-danger">
+                      Only letters, numbers, and underscores are allowed.
+                    </span>
+                  ) : isFetchDone ? (
+                    isUsernameTaken ? (
+                      <span className="!text-body-md text-danger">
+                        This username is already taken.
+                      </span>
+                    ) : (
+                      <></>
+                    )
+                  ) : username.length > 8 ? (
+                    <span className="!text-body-md text-danger">
+                      Username maximum 8 characters.
+                    </span>
+                  ) : null
                 }
               />
-            </form>
+            </div>
           </div>
+
           <div className="h-50 flex flex-col items-center justify-center">
             <button
-              onClick={() => navigate("/places")}
-              className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
+              type="submit"
+              className={
+                "text-heading-md w-80 py-2.5 px-3 rounded-full " +
+                (isFetchDone
+                  ? isUsernameTaken
+                    ? "bg-disable text-darkgray cursor-not-allowed"
+                    : "text-white bg-primary"
+                  : "bg-disable text-darkgray cursor-not-allowed")
+              }
             >
               Confirm Username
             </button>
           </div>
-        </div>
+        </form>
       )}
     </div>
   );

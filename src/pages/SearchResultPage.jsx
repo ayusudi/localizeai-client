@@ -176,7 +176,7 @@ export default function SearchResultPage() {
                 <div className="flex items-center justify-center">
                   <button
                     onClick={() => navigate("/places/123/write-review")}
-                    for="dropzone-file"
+                    htmlFor="dropzone-file"
                     className="w-full text-heading-md md:p-3 p-2.5 rounded-full text-white bg-primary text-center"
                   >
                     Add Your Review

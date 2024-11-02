@@ -31,7 +31,7 @@ export default function CardPursueWrite({ setIsShow }) {
       </div>
       <button
         onClick={() => navigate("/places/123/write-review")}
-        for="dropzone-file"
+        htmlFor="dropzone-file"
         className="w-5/6 max-w-80 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
       >
         Add Your Review

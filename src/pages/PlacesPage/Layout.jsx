@@ -22,7 +22,7 @@ export default function Layout() {
       />
       <img
         className="absolute top-6 rounded-full w-11 h-11 object-cover right-4"
-        src="https://static.standard.co.uk/2021/12/02/17/Guy20Berryman_Image20courtesy20of20Applied20Art20Forms.jpg?width=1200&auto=webp&quality=75&crop=5:3,smart"
+        src={"https://images.weserv.nl/?url=" + localStorage.getItem("profile")}
       />
       <Outlet />
     </div>

@@ -12,6 +12,8 @@ export default {
       tertiary: "#14AE5C",
       "tertiary-50": "#EBFFEE",
       white: "#FFFFFF",
+      disable: "#D9D9D9",
+      darkgray: "#98979A",
     },
     colors: {
       primary: "#FF695B",
@@ -22,6 +24,9 @@ export default {
       "tertiary-50": "#EBFFEE",
       white: "#FFFFFF",
       danger: "#900B09",
+      green: "#009951",
+      disable: "#D9D9D9",
+      darkgray: "#98979A",
     },
     fontSize: {
       "2xl": [

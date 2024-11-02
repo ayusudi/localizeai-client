@@ -4,12 +4,18 @@ import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Pagination } from "swiper/modules";
-
+import axios from "axios";
+import app from "../firebase";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
 export default function LandingPage() {
+  const baseUrl = "https://localizeai-server-da6245e547aa.herokuapp.com";
   const [cardKeys, setCardKeys] = useState(new Array(12).fill(false)); // Initialize keys for each card
   const [isMobile, setIsMobile] = useState(false); // State to check if it's mobile
   const containerRef = useRef(null); // Reference to the scroll container
@@ -106,6 +112,38 @@ export default function LandingPage() {
     setIsScrolling(true); // Resume scrolling
   };
 
+  const handleLogin = () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const token = await result.user.getIdToken();
+        return axios.post(`${baseUrl}/users/login`, { id_token: token });
+      })
+      .then(({ data }) => {
+        console.log("Server response:", data);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("status_username", data.status_username);
+        localStorage.setItem("name", data.name);
+        localStorage.setItem("profile", data.profile);
+        localStorage.setItem("access_token", data.access_token);
+        navigate("/register");
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("Error during login:", error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData?.email; // optional chaining
+        const credentialError = GoogleAuthProvider.credentialFromError(error);
+        console.error("Error details:", {
+          errorCode,
+          errorMessage,
+          email,
+          credentialError,
+        });
+      });
+  };
+
   return (
     <div className="relative">
       {!localStorage.getItem("FirstTime") && (
@@ -175,7 +213,7 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col items-center gap-2 md:gap-3">
             <button
-              onClick={() => navigate("/register")}
+              onClick={handleLogin}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
             >
               Login with Google
