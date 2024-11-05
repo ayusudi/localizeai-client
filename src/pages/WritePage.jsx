@@ -118,7 +118,7 @@ export default function WritePage() {
               </p>
               <label
                 htmlFor="dropzone-file"
-                className="w-4/6 max-w-80 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
+                className="w-4/6 max-w-80 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center cursor-pointer"
               >
                 Upload an Image
               </label>

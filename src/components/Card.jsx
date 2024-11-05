@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { Carousel } from "flowbite-react";
 import { gsap } from "gsap";
+import { useNavigate } from "react-router-dom";
 
-export default function Card({ cardKey }) {
+export default function Card({ cardKey, el }) {
+  const navigate = useNavigate();
   const cardRef = useRef(null); // Reference to the card element
 
   useEffect(() => {
@@ -14,31 +16,34 @@ export default function Card({ cardKey }) {
       ease: "power1.out", // Easing function
     });
   }, [cardKey]); // Runs when cardKey changes
-
+  const format = (text) =>
+    text.split(" ").slice(1, -2).join(" ").replace(/,$/, "");
   return (
     <div
       ref={cardRef} // Set the ref to the card element
       className="card overflow-hidden w-[300px] outline bg-white outline-primary-50 outline-2 rounded-2xl"
     >
-      <div className="pl-4 py-5">
-        <h3 className="mb-2 text-heading-lg">Jakarta Brew</h3>
-        <p className="mb-3 text-body-lg">Sudirman, Jakarta Selatan</p>
+      <div className="px-4 py-5">
+        <h3
+          onClick={() => navigate(`/places/${el.id}`)}
+          className="cursor-pointer mb-2 text-heading-lg line-clamp-1"
+        >
+          {el.title || "Jakarta Brew"}
+        </h3>
+        <p
+          onClick={() => navigate(`/places/${el.id}`)}
+          className="cursor-pointer mb-3 text-body-lg line-clamp-1"
+        >
+          {el.plus_code ? format(el.plus_code) : "Jakarta"}
+        </p>
         <div className="overflow-x-auto flex gap-1 no-scrollbar">
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
-            <p className="text-heading-sm text-primary text-nowrap cursor-default">
-              Work-Friendly
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-            <p className="text-heading-sm text-primary text-nowrap">
-              Classic Vibes
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-            <p className="text-heading-sm text-primary text-nowrap">
-              Hidden Gem
-            </p>
-          </div>
+          {el.categories.map((e) => (
+            <div key={e} className="w-fit py-1 px-2 rounded-xl bg-primary-100">
+              <p className="capitalize text-heading-sm text-primary text-nowrap cursor-default">
+                {e}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="h-50">
@@ -61,26 +66,14 @@ export default function Card({ cardKey }) {
             },
           }}
         >
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
+          {el.images.slice(0, 4).map((e, index) => (
+            <img
+              key={index}
+              src={"https://images.weserv.nl/?url=" + e}
+              alt={"picture" + index + el.title}
+              className="relative object-cover h-full"
+            />
+          ))}
         </Carousel>
       </div>
     </div>

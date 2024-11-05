@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { animated } from "react-spring";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import { DataContext } from "../Contexts"; // Import the DataContext
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 export default function LandingPage() {
+  const { explores } = useContext(DataContext) || {}; // Consume the context
   const baseUrl = "https://localizeai-server-da6245e547aa.herokuapp.com";
   const [cardKeys, setCardKeys] = useState(new Array(12).fill(false)); // Initialize keys for each card
   const [isMobile, setIsMobile] = useState(false); // State to check if it's mobile
@@ -119,7 +121,6 @@ export default function LandingPage() {
         return axios.post(`${baseUrl}/users/login`, { id_token: token });
       })
       .then(({ data }) => {
-        console.log("Server response:", data);
         localStorage.setItem("email", data.email);
         localStorage.setItem("username", data.username);
         localStorage.setItem("status_username", data.status_username);
@@ -171,9 +172,9 @@ export default function LandingPage() {
               modules={[EffectCoverflow, Pagination]}
               className="mySwiper"
             >
-              {new Array(9).fill("").map((el, i) => (
+              {explores["Work Friendly"].map((el, i) => (
                 <SwiperSlide key={i}>
-                  <Card />
+                  <Card el={el} />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -186,18 +187,19 @@ export default function LandingPage() {
             onMouseLeave={handleMouseLeave}
             className="hidden md:flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
           >
-            {new Array(12).fill("").map((el, i) => {
-              const cardKey = cardKeys[i];
+            {explores["Work Friendly"] &&
+              explores["Work Friendly"].map((el, i) => {
+                const cardKey = cardKeys[i];
 
-              return (
-                <animated.div
-                  key={i}
-                  className={`w-fit transition-transform duration-50 ease-out`}
-                >
-                  <Card cardKey={isMobile ? cardKey : 0} />
-                </animated.div>
-              );
-            })}
+                return (
+                  <animated.div
+                    key={i}
+                    className={`w-fit transition-transform duration-50 ease-out`}
+                  >
+                    <Card el={el} cardKey={isMobile ? cardKey : 0} />
+                  </animated.div>
+                );
+              })}
           </div>
         )}
 

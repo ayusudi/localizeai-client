@@ -59,7 +59,7 @@ export default function SearchPage() {
               </p>
               <label
                 htmlFor="dropzone-file"
-                className="w-5/6 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
+                className="cursor-pointer w-5/6 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
               >
                 Upload an Image
               </label>

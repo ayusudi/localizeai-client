@@ -48,8 +48,8 @@ const router = createBrowserRouter([
               return redirect("/register");
             }
           }
-          return null
-        }
+          return null;
+        },
       },
       {
         path: "register",
@@ -90,13 +90,13 @@ const router = createBrowserRouter([
         loader: () => {
           if (localStorage.getItem("access_token")) {
             if (localStorage.getItem("status_username") === "true") {
-              return null
+              return null;
             } else {
               return redirect("/register");
             }
           }
           return redirect("/");
-        }
+        },
       },
       {
         path: "places/failed",
@@ -123,13 +123,13 @@ const router = createBrowserRouter([
         loader: () => {
           if (localStorage.getItem("access_token")) {
             if (localStorage.getItem("status_username") === "true") {
-              return null
+              return null;
             } else {
               return redirect("/register");
             }
           }
           return redirect("/");
-        }
+        },
       },
       {
         path: "places/:slug/write-success",
