@@ -4,9 +4,6 @@ import { useOutletContext } from "react-router-dom";
 import { format, getOpeningHours, isOpen } from "../../helpers/helperText";
 export default function DetailPage() {
   const [data, setData] = useOutletContext();
-  useEffect(() => {
-    console.log(data);
-  }, []);
 
   return (
     <div>
@@ -33,6 +30,7 @@ export default function DetailPage() {
           >
             {data.images.map((el, i) => (
               <img
+                key={i}
                 src={"https://images.weserv.nl/?url=" + el}
                 alt="cafe-jakarta-brew"
                 className="relative h-64 md:h-96 object-cover"

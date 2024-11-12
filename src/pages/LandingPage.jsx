@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import { DataContext } from "../Contexts"; // Import the DataContext
-
+import { handleLogin } from "../helpers/googleLogin";
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -114,37 +114,6 @@ export default function LandingPage() {
     setIsScrolling(true); // Resume scrolling
   };
 
-  const handleLogin = () => {
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const token = await result.user.getIdToken();
-        return axios.post(`${baseUrl}/users/login`, { id_token: token });
-      })
-      .then(({ data }) => {
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("username", data.username);
-        localStorage.setItem("status_username", data.status_username);
-        localStorage.setItem("name", data.name);
-        localStorage.setItem("profile", data.profile);
-        localStorage.setItem("access_token", data.access_token);
-        navigate("/register");
-      })
-      .catch((error) => {
-        // Handle errors here
-        console.error("Error during login:", error);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData?.email; // optional chaining
-        const credentialError = GoogleAuthProvider.credentialFromError(error);
-        console.error("Error details:", {
-          errorCode,
-          errorMessage,
-          email,
-          credentialError,
-        });
-      });
-  };
-
   return (
     <div className="relative">
       {!localStorage.getItem("FirstTime") && (
@@ -172,7 +141,7 @@ export default function LandingPage() {
               modules={[EffectCoverflow, Pagination]}
               className="mySwiper"
             >
-              {explores["Work Friendly"].map((el, i) => (
+              {explores["work_friendly"].map((el, i) => (
                 <SwiperSlide key={i}>
                   <Card el={el} />
                 </SwiperSlide>
@@ -187,8 +156,8 @@ export default function LandingPage() {
             onMouseLeave={handleMouseLeave}
             className="hidden md:flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
           >
-            {explores["Work Friendly"] &&
-              explores["Work Friendly"].map((el, i) => {
+            {explores.work_friendly &&
+              explores.work_friendly.map((el, i) => {
                 const cardKey = cardKeys[i];
 
                 return (
@@ -215,7 +184,7 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col items-center gap-2 md:gap-3">
             <button
-              onClick={handleLogin}
+              onClick={() => handleLogin(navigate)}
               className="text-heading-md w-80 py-2.5 px-3 rounded-full text-white bg-primary"
             >
               Login with Google

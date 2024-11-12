@@ -71,11 +71,7 @@ export default function WritePage() {
   useEffect(() => {
     fetchDetail(id)
       .then((result) => {
-        console.log(result);
-
         setData(result);
-        console.log(result.categories);
-
         setLoading(false);
       })
       .catch((err) => {
