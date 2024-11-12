@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CardPursueWrite({ setIsShow }) {
+  const { id } = useParams();
   const navigate = useNavigate();
   return (
     <div className="bg-white w-full flex flex-col rounded-2xl gap-4 items-center pb-6">
@@ -30,7 +31,7 @@ export default function CardPursueWrite({ setIsShow }) {
         <p className="text-body-lg text-center">Write your review now!</p>
       </div>
       <button
-        onClick={() => navigate("/places/123/write-review")}
+        onClick={() => navigate(`/places/${id}/write-review`)}
         htmlFor="dropzone-file"
         className="w-5/6 max-w-80 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
       >

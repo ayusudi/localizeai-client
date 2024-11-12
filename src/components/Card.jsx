@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Carousel } from "flowbite-react";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+import { format } from "../helpers/helperText";
 
 export default function Card({ cardKey, el }) {
   const navigate = useNavigate();
@@ -16,8 +17,7 @@ export default function Card({ cardKey, el }) {
       ease: "power1.out", // Easing function
     });
   }, [cardKey]); // Runs when cardKey changes
-  const format = (text) =>
-    text.split(" ").slice(1, -2).join(" ").replace(/,$/, "");
+
   return (
     <div
       ref={cardRef} // Set the ref to the card element
@@ -25,13 +25,13 @@ export default function Card({ cardKey, el }) {
     >
       <div className="px-4 py-5">
         <h3
-          onClick={() => navigate(`/places/${el.id}`)}
+          onClick={() => navigate(`/places/${el._id}`)}
           className="cursor-pointer mb-2 text-heading-lg line-clamp-1"
         >
           {el.title || "Jakarta Brew"}
         </h3>
         <p
-          onClick={() => navigate(`/places/${el.id}`)}
+          onClick={() => navigate(`/places/${el._id}`)}
           className="cursor-pointer mb-3 text-body-lg line-clamp-1"
         >
           {el.plus_code ? format(el.plus_code) : "Jakarta"}

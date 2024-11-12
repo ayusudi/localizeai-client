@@ -1,7 +1,13 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import SwitchOverview from "../../components/SwitchOverview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Lottie from "lottie-react";
+import loading from "../../assets/loading.json";
+import fetchDetail from "../../helpers/fetchDetail";
 export default function Layout() {
+  let [isLoading, setLoading] = useState(true);
+  let [data, setData] = useState({});
+  let { id } = useParams();
   let location = useLocation();
   const navigate = useNavigate();
   const [checkStatus, setCheckStatus] = useState(
@@ -10,9 +16,20 @@ export default function Layout() {
   const changePage = () => {
     setCheckStatus(!checkStatus);
     if (location.pathname.split("/").length === 3)
-      navigate("/places/123/review");
-    else navigate("/places/123");
+      navigate(`/places/${id}/review`);
+    else navigate(`/places/${id}`);
   };
+  useEffect(() => {
+    fetchDetail(id)
+      .then((result) => {
+        setData(result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className=" page flex flex-col pb-6">
       <div className="bg-white relative flex justify-center pt-6 pb-3 border-b-[1px]">
@@ -61,7 +78,16 @@ export default function Layout() {
           </svg>
         </button>
       </div>
-      <Outlet />
+      {isLoading ? (
+        <Lottie
+          loop={true}
+          className="m-auto"
+          animationData={loading}
+          style={{ minWidth: 330, maxWidth: "80%", aspectRatio: "1/1" }}
+        />
+      ) : (
+        <Outlet context={[data, setData]} />
+      )}
     </div>
   );
 }

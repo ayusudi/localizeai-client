@@ -1,12 +1,93 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Carousel } from "flowbite-react";
+import { useEffect, useState } from "react";
+import fetchDetail from "../helpers/fetchDetail";
+import { format } from "../helpers/helperText";
+import Lottie from "lottie-react";
+import loading from "../assets/loading.json";
+
+const Component = ({ data }) => {
+  return (
+    <div className="card overflow-hidden max-w-[600px] w-11/12 outline bg-white outline-primary-50 outline-2 rounded-2xl">
+      <div className="pl-4 py-5">
+        <h3 className="mb-2 text-heading-lg">{data?.title}</h3>
+        <p className="mb-3 text-body-lg">{format(data.plus_code)}</p>
+        <div className="overflow-x-auto flex gap-1 no-scrollbar">
+          {data.categories?.map((el) => {
+            return (
+              <div
+                key={el}
+                className="w-fit py-1 px-2 rounded-xl bg-primary-100"
+              >
+                <p className="text-heading-sm text-primary text-nowrap cursor-default">
+                  {el}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="h-50">
+        <Carousel
+          pauseOnHover
+          theme={{
+            scrollContainer: {
+              base: "flex h-full snap-mandatory overflow-y-hidden overflow-x-scroll scroll-smooth rounded-none",
+              snap: "snap-x",
+            },
+            control: { base: "hidden" },
+            indicators: {
+              active: {
+                off: "bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
+                on: "bg-white dark:bg-gray-800",
+              },
+              base: "h-2 w-2 rounded-full",
+              wrapper:
+                "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-2",
+            },
+          }}
+        >
+          {data.images.map((el, i) => {
+            return (
+              <img
+                key={i}
+                src={"https://images.weserv.nl/?url=" + el}
+                alt="cafe-jakarta-brew"
+                className="relative"
+              />
+            );
+          })}
+        </Carousel>
+      </div>
+    </div>
+  );
+};
+
 export default function WritePage() {
+  const [data, setData] = useState({});
+  const [isLoading, setLoading] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
+  useEffect(() => {
+    fetchDetail(id)
+      .then((result) => {
+        console.log(result);
+
+        setData(result);
+        console.log(result.categories);
+
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className=" page flex flex-col pb-6">
       <div className="bg-white relative flex pt-6 pb-3 border-b-[1px] ">
         <button
-          onClick={() => navigate("/places/123")}
+          onClick={() => navigate("/places/" + id)}
           className="z-10 cursor-pointer mx-4 bg-white rounded-full flex justify-center items-center h-12 w-12 border"
         >
           <svg
@@ -27,71 +108,20 @@ export default function WritePage() {
         </h1>
       </div>
       <div className="bg-gradient-to-t from-white to-[#FFB8B2] flex-grow flex flex-col items-center pt-4 gap-4">
-        <div className="card overflow-hidden max-w-[600px] w-11/12 outline bg-white outline-primary-50 outline-2 rounded-2xl">
-          <div className="pl-4 py-5">
-            <h3 className="mb-2 text-heading-lg">Jakarta Brew</h3>
-            <p className="mb-3 text-body-lg">Sudirman, Jakarta Selatan</p>
-            <div className="overflow-x-auto flex gap-1 no-scrollbar">
-              <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
-                <p className="text-heading-sm text-primary text-nowrap cursor-default">
-                  Work-Friendly
-                </p>
-              </div>
-              <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-                <p className="text-heading-sm text-primary text-nowrap">
-                  Classic Vibes
-                </p>
-              </div>
-              <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-                <p className="text-heading-sm text-primary text-nowrap">
-                  Hidden Gem
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="h-50">
-            <Carousel
-              pauseOnHover
-              theme={{
-                scrollContainer: {
-                  base: "flex h-full snap-mandatory overflow-y-hidden overflow-x-scroll scroll-smooth rounded-none",
-                  snap: "snap-x",
-                },
-                control: { base: "hidden" },
-                indicators: {
-                  active: {
-                    off: "bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
-                    on: "bg-white dark:bg-gray-800",
-                  },
-                  base: "h-2 w-2 rounded-full",
-                  wrapper:
-                    "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-2",
-                },
-              }}
-            >
-              <img
-                src="/cafe-placeholder.png"
-                alt="cafe-jakarta-brew"
-                className="relative"
-              />
-              <img
-                src="/cafe-placeholder.png"
-                alt="cafe-jakarta-brew"
-                className="relative"
-              />
-              <img
-                src="/cafe-placeholder.png"
-                alt="cafe-jakarta-brew"
-                className="relative"
-              />
-              <img
-                src="/cafe-placeholder.png"
-                alt="cafe-jakarta-brew"
-                className="relative"
-              />
-            </Carousel>
-          </div>
-        </div>
+        {isLoading ? (
+          <Lottie
+            loop={true}
+            animationData={loading}
+            style={{
+              height: 300,
+              aspectRatio: "4/2",
+              background: "white",
+            }}
+            className="m-auto rounded-xl p-5"
+          />
+        ) : (
+          <Component data={data} />
+        )}
         <form className="flex-1 bg-white w-full flex justify-center">
           <div className="max-w-[600px] w-11/12  flex flex-col py-6 gap-4">
             <div>

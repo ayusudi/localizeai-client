@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import SearchPage from "./pages/PlacesPage/SearchPage.jsx";
 import ExplorePage from "./pages/PlacesPage/ExplorePage.jsx";
+import ExploreCategoryPage from "./pages/PlacesPage/ExploreCategoryPage";
 import DetailPage from "./pages/DetailPage/DetailPage.jsx";
 import Layout from "./pages/PlacesPage/Layout.jsx";
 import WritePage from "./pages/WritePage.jsx";
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
             path: "explore",
             element: <ExplorePage />,
           },
+          {
+            path: "explore/:category",
+            element: <ExploreCategoryPage />,
+          },
         ],
       },
       {
@@ -118,7 +123,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "places/:slug/write-review",
+        path: "places/:id/write-review",
         element: <WritePage />,
         loader: () => {
           if (localStorage.getItem("access_token")) {
@@ -132,7 +137,7 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "places/:slug/write-success",
+        path: "places/:id/write-success",
         element: <SuccessPage />,
       },
       // {

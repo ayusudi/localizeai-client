@@ -1,4 +1,9 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import { Carousel } from "flowbite-react";
 import { useEffect, useState } from "react";
@@ -73,6 +78,7 @@ function Card() {
 }
 
 export default function SearchResultPage() {
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotFound, setIsNotFound] = useState(false);
@@ -159,7 +165,7 @@ export default function SearchResultPage() {
           </div>
         </div>
         {isNotFound ? (
-          <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-4 py-5 md:p-6 md:items-start items-center md:justify-center">
+          <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-0 py-5 md:p-6 md:items-start items-center md:justify-center">
             <div className="flex flex-col max-w-[380px] w-11/12 bg-white rounded-xl overflow-hidden aspect-[353/374] h-auto">
               <img
                 src="/map.png"
@@ -175,7 +181,7 @@ export default function SearchResultPage() {
                 </div>
                 <div className="flex items-center justify-center">
                   <button
-                    onClick={() => navigate("/places/123/write-review")}
+                    onClick={() => navigate(`/places/${id}/write-review`)}
                     htmlFor="dropzone-file"
                     className="w-full text-heading-md md:p-3 p-2.5 rounded-full text-white bg-primary text-center"
                   >

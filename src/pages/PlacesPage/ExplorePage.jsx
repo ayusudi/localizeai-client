@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import { DataContext } from "../../Contexts"; // Import the DataContext
+import { useNavigate } from "react-router-dom";
 function SlideCard({ keyname }) {
   const { explores } = useContext(DataContext) || {}; // Consume the context
   return (
@@ -16,26 +17,37 @@ function SlideCard({ keyname }) {
 }
 
 export default function ExplorePage() {
+  const navigate = useNavigate();
   const list = [
     {
       keyname: "Hidden Gem",
       placeholder: "Hidden Gems",
+      key: "hidden-gem",
+      underscore: "hidden_gem",
     },
     {
       keyname: "Work Friendly",
       placeholder: "Work-Friendly Spots",
+      key: "work-friendly",
+      underscore: "work_friendly",
     },
     {
       keyname: "Pet Friendly",
       placeholder: "Pet Dates",
+      key: "pet-friendly",
+      underscore: "pet_friendly",
     },
     {
       keyname: "Cozy Atmosphere",
       placeholder: "Cozy Atmosphere",
+      key: "cozy-atmosphere",
+      underscore: "cozy_atmosphere",
     },
     {
       keyname: "Classic Vibes",
       placeholder: "Classic Vibes",
+      key: "classic-vibes",
+      underscore: "classic_vibes",
     },
   ];
   return (
@@ -45,11 +57,14 @@ export default function ExplorePage() {
           <div key={el.keyname}>
             <div className="flex justify-between px-5 items-center">
               <h2 className="text-heading-lg">{el.placeholder}</h2>
-              <button className="text-heading-md text-primary bg-primary-50 rounded-full px-2.5 py-1">
+              <button
+                onClick={() => navigate(`/places/explore/${el.key}`)}
+                className="text-heading-md text-primary bg-primary-50 rounded-full px-2.5 py-1"
+              >
                 See more
               </button>
             </div>
-            <SlideCard keyname={el.keyname} />
+            <SlideCard keyname={el.underscore} />
           </div>
         );
       })}
