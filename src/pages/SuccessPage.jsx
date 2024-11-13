@@ -16,7 +16,7 @@ export default function SuccessPage() {
       </div>
       <div className="h-50 flex flex-col items-center justify-center bg-white mx-auto w-full">
         <button
-          onClick={() => navigate(`/places/${id}/review`)}
+          onClick={() => navigate(`/places/${id}/reviews`)}
           className="text-heading-md p-3 rounded-full text-white bg-primary w-full max-w-80"
         >
           View Your Review

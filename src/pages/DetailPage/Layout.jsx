@@ -16,7 +16,7 @@ export default function Layout() {
   const changePage = () => {
     setCheckStatus(!checkStatus);
     if (location.pathname.split("/").length === 3)
-      navigate(`/places/${id}/review`);
+      navigate(`/places/${id}/reviews`);
     else navigate(`/places/${id}`);
   };
   useEffect(() => {
