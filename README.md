@@ -1,8 +1,24 @@
-# React + Vite
+# Localizeai Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Localizeai is an innovative social media platform designed to enhance culinary experiences and the discovery of dining spots in Jakarta. It empowers users to find the perfect place—whether it’s a hidden café or an iconic dining location—through seamless text and image search.
 
-Currently, two official plugins are available:
+## How To Run Localizeai In Your Local PC
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Create .env with this .env.template
+
+```
+VITE_FIREBASE_APIKEY=
+VITE_FIREBASE_AUTHDOMAIN=
+VITE_FIREBASE_PROJECTID=
+VITE_FIREBASE_STORAGE=
+VITE_FIREBASE_MASSAGINGSENDER=
+VITE_FIREBASE_APPID=
+VITE_FIREBASE_MEASUREMENTID=
+VITE_BASEURLOFF=
+VITE_BASEURL=
+```
+
+```bash
+npm install
+npm run dev
+```
