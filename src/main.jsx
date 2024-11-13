@@ -21,7 +21,7 @@ import ReviewPage from "./pages/DetailPage/ReviewPage.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
 import NewPlacePage from "./pages/NewPlacePage.jsx";
 import FailedPage from "./pages/FailedPage.jsx";
-import SuccessPlacePage from "./pages/SuccessPlacePAge.jsx";
+import SuccessPlacePage from "./pages/SuccessPlacePage.jsx";
 
 const router = createBrowserRouter([
   {

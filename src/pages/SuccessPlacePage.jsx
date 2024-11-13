@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function SuccessPlacePage() {
-  const { id } = useParams();
   const navigate = useNavigate();
   return (
     <div className="page bg-redwhite flex flex-col justify-center w-full px-4">
