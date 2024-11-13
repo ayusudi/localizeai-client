@@ -4,7 +4,99 @@ import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import loading from "../../assets/loading.json";
 import fetchDetail from "../../helpers/fetchDetail";
+import {
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookShareButton,
+} from "react-share";
+import {
+  faFacebook,
+  faTwitter,
+  faInstagram,
+  faWhatsapp,
+  faTelegram,
+} from "@fortawesome/free-brands-svg-icons";
+
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+function ModalShare({ id, setModalUrl }) {
+  let str = "https://localizeai.online/" + id;
+
+  return (
+    <>
+      <div id="background-popup"></div>
+      <div id="popup" className="popup">
+        <div className="content">
+          <FontAwesomeIcon
+            onClick={() => setModalUrl("")}
+            icon={faClose}
+            color="grey"
+            style={{ alignSelf: "flex-end", paddingTop: 5, cursor: "pointer" }}
+          />
+          <p style={{ marginTop: 10 }}>
+            <b>Share this link via</b>
+          </p>
+          <ul
+            className="icons"
+            style={{ display: "flex", gap: 4, marginTop: 5, marginBottom: 5 }}
+          >
+            <li>
+              <FacebookShareButton title={"Check it out!"} url={str}>
+                <FontAwesomeIcon
+                  className="buttonIconSocMed"
+                  icon={faFacebook}
+                />
+              </FacebookShareButton>
+            </li>
+            <li>
+              <TwitterShareButton title={"Check it out!"} url={str}>
+                <FontAwesomeIcon
+                  className="buttonIconSocMed"
+                  icon={faTwitter}
+                />
+              </TwitterShareButton>
+            </li>
+            <li>
+              <FontAwesomeIcon
+                className="buttonIconSocMed"
+                icon={faInstagram}
+              />
+            </li>
+            <li>
+              <WhatsappShareButton title={"Check it out!"} url={str}>
+                <FontAwesomeIcon
+                  className="buttonIconSocMed"
+                  icon={faWhatsapp}
+                />
+              </WhatsappShareButton>
+            </li>
+            <li>
+              <TelegramShareButton title={"Check it out! " + str}>
+                <FontAwesomeIcon
+                  className="buttonIconSocMed"
+                  icon={faTelegram}
+                />
+              </TelegramShareButton>
+            </li>
+          </ul>
+          <p>Or copy link</p>
+          <div className="field">
+            <i className="url-icon uil uil-link"></i>
+            <input type="text" readOnly defaultValue={str} />
+          </div>
+          <button className="button-radius" id="modal">
+            Copy
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function Layout() {
+  const [modal, setModalUrl] = useState("");
   let [isLoading, setLoading] = useState(true);
   let [data, setData] = useState({});
   let { id } = useParams();
@@ -57,7 +149,7 @@ export default function Layout() {
           handleToggle={() => changePage()}
         />
         <button
-          onClick={() => navigate("/places")}
+          onClick={() => setModalUrl(id)}
           className="absolute top-6 bg-white right-4 rounded-full flex justify-center items-center h-12 w-12 border"
         >
           <svg
@@ -86,7 +178,13 @@ export default function Layout() {
           style={{ minWidth: 330, maxWidth: "80%", aspectRatio: "1/1" }}
         />
       ) : (
-        <Outlet context={[data, setData]} />
+        <>
+          <Outlet context={[data, setData]} />
+
+          {modal.length ? (
+            <ModalShare id={id} setModalUrl={setModalUrl} />
+          ) : null}
+        </>
       )}
     </div>
   );
