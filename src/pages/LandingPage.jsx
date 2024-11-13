@@ -14,9 +14,10 @@ import { DataContext } from "../Contexts"; // Import the DataContext
 import { handleLogin } from "../helpers/googleLogin";
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+import fetchExplores from "../helpers/fetchExplores";
 
 export default function LandingPage() {
-  const { explores } = useContext(DataContext) || {}; // Consume the context
+  const [data, setData] = useState([]);
   const baseUrl = "https://localizeai-server-da6245e547aa.herokuapp.com";
   const [cardKeys, setCardKeys] = useState(new Array(12).fill(false)); // Initialize keys for each card
   const [isMobile, setIsMobile] = useState(false); // State to check if it's mobile
@@ -26,6 +27,11 @@ export default function LandingPage() {
   const navigate = useNavigate();
   // Effect to detect mobile screen size
   useEffect(() => {
+    fetchExplores().then((result) => {
+      if (result && result["Work Friendly"]) {
+        setData(result["Work Friendly"].data);
+      }
+    });
     const mediaQuery = window.matchMedia("(max-width: 768px)"); // Adjust the breakpoint as needed
 
     const handleMediaChange = (e) => {
@@ -141,7 +147,7 @@ export default function LandingPage() {
               modules={[EffectCoverflow, Pagination]}
               className="mySwiper"
             >
-              {explores["work_friendly"]?.map((el, i) => (
+              {data?.map((el, i) => (
                 <SwiperSlide key={i}>
                   <Card el={el} />
                 </SwiperSlide>
@@ -156,8 +162,8 @@ export default function LandingPage() {
             onMouseLeave={handleMouseLeave}
             className="hidden md:flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
           >
-            {explores.work_friendly &&
-              explores.work_friendly?.map((el, i) => {
+            {data.length &&
+              data.map((el, i) => {
                 const cardKey = cardKeys[i];
 
                 return (

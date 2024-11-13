@@ -115,8 +115,6 @@ export default function WritePage() {
           images: [result],
         },
       });
-      console.log(data);
-
       if (!data) {
         throw {};
       }
