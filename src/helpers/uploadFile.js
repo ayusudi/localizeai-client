@@ -5,7 +5,7 @@ export async function uploadFile(folder, file) {
       method: "GET",
       url: import.meta.env.VITE_BASEURL + "/api/v1/storages/presign",
       params: {
-        file_name: "image",
+        file_name: file.name,
         folder
       }
     })

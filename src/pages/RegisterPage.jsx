@@ -18,18 +18,14 @@ export default function RegisterPage() {
       try {
         setIsFetchDone(false);
         const { data } = await axios(
-          `https://localizeai-server-da6245e547aa.herokuapp.com/users/${input}`
+          `https://api.localizeai.online/api/v1/users/username_exists?username=${input}`
         );
         setIsFetchDone(true);
-        if (data.message === "NOT_FOUND") {
-          setIsUsernameTaken(false);
-        } else {
-          setIsUsernameTaken(true);
-        }
+        setIsUsernameTaken(data);
       } catch (error) {
         console.error("Error checking username:", error);
       }
-    }, 2000), // 2-second debounce
+    }, 1000), // 1-second debounce
     []
   );
 

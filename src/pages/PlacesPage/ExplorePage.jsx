@@ -76,12 +76,16 @@ export default function ExplorePage() {
           </div>
         );
       })}
-      <button
-        onClick={() => navigate("/places/new")}
-        className="w-[72px] h-[72px] md:w-24 md:h-24 shadow-2xl bottom-5 md:bottom-10 right-[10px] md:left-[94%] rounded-full bg-primary fixed flex items-center justify-center"
-      >
-        <img src="/62x2.png" className="w-12 h-12 md:h-16 md:w-16" />
-      </button>
+      {localStorage.getItem("access_token") ? (
+        <button
+          onClick={() => navigate("/places/new")}
+          className="w-[72px] h-[72px] md:w-24 md:h-24 shadow-2xl bottom-5 md:bottom-10 right-[10px] md:right-[20px] rounded-full bg-primary fixed flex items-center justify-center"
+        >
+          <img src="/62x2.png" className="w-12 h-12 md:h-16 md:w-16" />
+        </button>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

@@ -195,7 +195,10 @@ export default function LandingPage() {
             >
               Login with Google
             </button>
-            <button className="text-heading-md w-80 py-2.5 px-3 rounded-full text-primary bg-primary-50">
+            <button
+              onClick={() => navigate("/places")}
+              className="text-heading-md w-80 py-2.5 px-3 rounded-full text-primary bg-primary-50"
+            >
               Continue as Guest
             </button>
           </div>

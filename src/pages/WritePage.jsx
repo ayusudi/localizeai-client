@@ -104,7 +104,7 @@ export default function WritePage() {
       let result = await uploadFile("reviews", rawFile);
       let { data } = await axios({
         method: "POST",
-        url: `http://localhost:3000/api/v1/places/${id}/reviews`,
+        url: `https://api.localizeai.online/api/v1/places/${id}/reviews`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           "Content-Type": "application/json",

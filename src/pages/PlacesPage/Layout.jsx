@@ -88,9 +88,6 @@ export default function Layout() {
           {dataProfile.email ? (
             <>
               <Dropdown.Item>
-                <p className="text-body-xl text-semibold">Profile</p>
-              </Dropdown.Item>
-              <Dropdown.Item>
                 <p onClick={logout} className="text-body-xl text-semibold">
                   Logout
                 </p>

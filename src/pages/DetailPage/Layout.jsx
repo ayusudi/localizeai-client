@@ -22,7 +22,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function ModalShare({ id, setModalUrl }) {
-  let str = "https://localizeai.online/" + id;
+  let str = "https://localizeai.online/places/" + id;
 
   return (
     <>
