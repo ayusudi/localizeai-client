@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import axios from "axios";
 
 export default function RegisterPage() {
-  const baseUrl = "https://localizeai-server-da6245e547aa.herokuapp.com";
+  const baseUrl = import.meta.env.VITE_BASEURL + "/api/v1";
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState(true);
   const [isFetchDone, setIsFetchDone] = useState(false);
@@ -17,7 +17,9 @@ export default function RegisterPage() {
     debounce(async (input) => {
       try {
         setIsFetchDone(false);
-        const { data } = await axios(`${baseUrl}/users/${input}`);
+        const { data } = await axios(
+          `https://localizeai-server-da6245e547aa.herokuapp.com/users/${input}`
+        );
         setIsFetchDone(true);
         if (data.message === "NOT_FOUND") {
           setIsUsernameTaken(false);
@@ -50,13 +52,17 @@ export default function RegisterPage() {
     e.preventDefault();
     if (isFetchDone && !isUsernameTaken) {
       let { data } = await axios({
-        url: baseUrl + "/users/" + username,
-        method: "PATCH",
+        url: baseUrl + "/users/username",
+        method: "PUT",
+        data: {
+          username,
+        },
         headers: {
-          access_token: localStorage.getItem("access_token"),
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
         },
       });
-      localStorage.setItem("username", data.user.username);
+      localStorage.setItem("username", data.username);
       localStorage.setItem("status_username", true);
       navigate("/places");
     }
@@ -70,9 +76,10 @@ export default function RegisterPage() {
             <img
               className="rounded-full w-32 h-32 object-cover"
               src={
-                localStorage.getItem("access_token") ? 
-                "https://images.weserv.nl/?url=" +
-                localStorage.getItem("profile") : "/default.png"
+                localStorage.getItem("access_token")
+                  ? "https://images.weserv.nl/?url=" +
+                    localStorage.getItem("profile")
+                  : "/default.png"
               }
               alt="User Profile"
             />

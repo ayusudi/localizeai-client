@@ -2,21 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import { DataContext } from "../../Contexts"; // Import the DataContext
 import { useNavigate } from "react-router-dom";
-function SlideCard({ keyname }) {
-  const { explores } = useContext(DataContext) || {}; // Consume the context
+function SlideCard({ data }) {
   return (
     <div className="overflow-x-auto flex gap-4 no-scrollbar h-[380px] px-4 pb-3 pt-1">
-      {explores[keyname] &&
-        explores[keyname].slice(0, 8).map((el, i) => (
-          <div key={i} className="w-fit">
-            <Card el={el} />
-          </div>
-        ))}
+      {data && data.length > 0 ? (
+        <>
+          {data.map((el, i) => {
+            return (
+              <div key={i} className="w-fit">
+                <Card el={el} />
+              </div>
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
 
 export default function ExplorePage() {
+  const { explores } = useContext(DataContext) || {}; // Consume the context
   const navigate = useNavigate();
   const list = [
     {
@@ -50,8 +57,9 @@ export default function ExplorePage() {
       underscore: "classic_vibes",
     },
   ];
+
   return (
-    <div className="bg-white rounded-t-3xl border border-red-200 border-b-0 flex-1 mt-6 pt-5 gap-3 flex flex-col">
+    <div className="relative bg-white rounded-t-3xl border border-red-200 border-b-0 flex-1 mt-6 pt-5 gap-3 flex flex-col">
       {list.map((el) => {
         return (
           <div key={el.keyname}>
@@ -64,10 +72,16 @@ export default function ExplorePage() {
                 See more
               </button>
             </div>
-            <SlideCard keyname={el.underscore} />
+            <SlideCard data={explores[el.keyname]?.data} />
           </div>
         );
       })}
+      <button
+        onClick={() => navigate("/places/new")}
+        className="w-[72px] h-[72px] md:w-24 md:h-24 shadow-2xl bottom-5 md:bottom-10 right-[10px] md:left-[94%] rounded-full bg-primary fixed flex items-center justify-center"
+      >
+        <img src="/62x2.png" className="w-12 h-12 md:h-16 md:w-16" />
+      </button>
     </div>
   );
 }

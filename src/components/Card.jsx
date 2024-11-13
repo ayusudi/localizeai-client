@@ -21,7 +21,7 @@ export default function Card({ cardKey, el }) {
   return (
     <div
       ref={cardRef} // Set the ref to the card element
-      className="card overflow-hidden w-[300px] outline bg-white outline-primary-50 outline-2 rounded-2xl"
+      className="m-auto card overflow-hidden w-[300px] outline bg-white outline-primary-50 outline-2 rounded-2xl"
     >
       <div className="px-4 py-5">
         <h3
@@ -48,6 +48,7 @@ export default function Card({ cardKey, el }) {
       </div>
       <div className="h-50">
         <Carousel
+          slide={false}
           pauseOnHover
           theme={{
             scrollContainer: {

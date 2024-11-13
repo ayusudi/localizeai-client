@@ -7,32 +7,41 @@ import {
 
 import { Carousel } from "flowbite-react";
 import { useEffect, useState } from "react";
-function Card() {
+import searchByImageOrSearch from "../helpers/searchByImageOrSearch";
+import { format } from "../helpers/helperText";
+import Lottie from "lottie-react";
+import loading from "../assets/coffee.json";
+// import Card from "../components/Card";
+function Card({ el }) {
+  const navigate = useNavigate();
   return (
     <div className="card overflow-hidden w-11/12  max-w-[380px] outline bg-white outline-primary-50 outline-2 rounded-2xl">
       <div className="pl-4 py-5">
-        <h3 className="mb-2 text-heading-lg">Jakarta Brew</h3>
-        <p className="mb-3 text-body-lg">Sudirman, Jakarta Selatan</p>
+        <h3
+          onClick={() => navigate(`/places/${el._id}`)}
+          className="mb-2 text-heading-lg line-clamp-1"
+        >
+          {el.title}
+        </h3>
+        <p
+          onClick={() => navigate(`/places/${el._id}`)}
+          className="mb-3 text-body-lg"
+        >
+          {format(el.plus_code)}
+        </p>
         <div className="overflow-x-auto flex gap-1 no-scrollbar">
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
-            <p className="text-heading-sm text-primary text-nowrap cursor-default">
-              Work-Friendly
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-            <p className="text-heading-sm text-primary text-nowrap">
-              Classic Vibes
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100 cursor-default">
-            <p className="text-heading-sm text-primary text-nowrap">
-              Hidden Gem
-            </p>
-          </div>
+          {el.categories.map((e) => (
+            <div key={e} className="w-fit py-1 px-2 rounded-xl bg-primary-100">
+              <p className="capitalize text-heading-sm text-primary text-nowrap cursor-default">
+                {e}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="h-50">
         <Carousel
+          slide={false}
           pauseOnHover
           theme={{
             scrollContainer: {
@@ -51,26 +60,14 @@ function Card() {
             },
           }}
         >
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
-          <img
-            src="/cafe-placeholder.png"
-            alt="cafe-jakarta-brew"
-            className="relative"
-          />
+          {el.images.slice(0, 4).map((e, index) => (
+            <img
+              key={index}
+              src={"https://images.weserv.nl/?url=" + e}
+              alt={"picture" + index + el.title}
+              className="md:w-[380px] relative object-cover h-full"
+            />
+          ))}
         </Carousel>
       </div>
     </div>
@@ -78,11 +75,23 @@ function Card() {
 }
 
 export default function SearchResultPage() {
-  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [list, setList] = useState([]);
+  const { state } = useLocation();
+  const [text, setText] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotFound, setIsNotFound] = useState(false);
   useEffect(() => {
+    if (state && state.data) {
+      if (state?.data?.q) {
+        setText(state.data.q);
+      }
+      searchByImageOrSearch(state.data).then((data) => {
+        setList(data);
+      });
+    }
+
     const searchParams = new URLSearchParams(location.search);
     const paramValue = searchParams.get("q"); // replace 'yourParam' with your actual query param name
     if (paramValue && paramValue.toLowerCase().includes("not")) {
@@ -92,7 +101,7 @@ export default function SearchResultPage() {
   return (
     <div>
       <div className="flex flex-col page py-6">
-        <form action="" className="flex px-5 items-center  gap-2">
+        <form action="" className="flex px-5 items-center gap-2 pb-5">
           <button
             onClick={() => navigate("/places")}
             className="rounded-full flex justify-center items-center h-12 w-12 border"
@@ -112,9 +121,12 @@ export default function SearchResultPage() {
           </button>
           <div className="flex-1 flex items-center border rounded-full p-1">
             <input
-              className="flex-grow !outline-none ring-0 border-0 focus:!outline-none !ring-white focus:ring-offset-0"
+              style={{ backgroundColor: "transparent" }}
+              className="!bg-transparent flex-grow !outline-none ring-0 border-0 focus:!outline-none outline-tranparent !ring-transparent focus:ring-offset-0"
               type="text"
               placeholder="What you're looking for"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             />
             <button
               type="submit"
@@ -137,36 +149,9 @@ export default function SearchResultPage() {
             </button>
           </div>
         </form>
-        <div className="overflow-x-auto flex gap-1 no-scrollbar px-6 py-2.5">
-          <div className="w-fit py-1 px-2 rounded-xl bg-primary-100">
-            <p className="text-heading-sm text-primary text-nowrap cursor-default">
-              Work-Friendly
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl border cursor-default">
-            <p className="text-heading-sm text-secondary text-nowrap">
-              Classic Vibes
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl border cursor-default">
-            <p className="text-heading-sm text-secondary text-nowrap">
-              Hidden Gem
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl border cursor-default">
-            <p className="text-heading-sm text-secondary text-nowrap">
-              Productive WFC
-            </p>
-          </div>
-          <div className="w-fit py-1 px-2 rounded-xl border cursor-default">
-            <p className="text-heading-sm text-secondary text-nowrap">
-              Skena Kid
-            </p>
-          </div>
-        </div>
         {isNotFound ? (
           <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-0 py-5 md:p-6 md:items-start items-center md:justify-center">
-            <div className="flex flex-col max-w-[380px] w-11/12 bg-white rounded-xl overflow-hidden aspect-[353/374] h-auto">
+            <div className="flex flex-col min-w-[330px] max-w-[380px] w-11/12 bg-white rounded-xl overflow-hidden aspect-[353/374] h-auto">
               <img
                 src="/map.png"
                 alt="map"
@@ -192,19 +177,35 @@ export default function SearchResultPage() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-4 md:gap-8 px-4 py-5 md:p-6 md:items-start items-center justify-center md:grid md:grid-cols-4">
-            {new Array(16).fill("").map((el, i) => {
-              return (
-                <div
-                  className="flex items-center justify-center"
-                  key={i}
-                  onClick={() => navigate("/places/123")}
-                >
-                  <Card />
-                </div>
-              );
-            })}
-          </div>
+          <>
+            {list?.length ? (
+              <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] gap-6 md:gap-8 px-0 md:px-4 py-5 md:p-6 md:items-start items-center justify-center md:grid md:grid-cols-4">
+                {list?.map((el, i) => {
+                  return (
+                    <div
+                      className="flex flex-grow items-center justify-center"
+                      key={i}
+                      onClick={() => navigate("/places/" + el._id)}
+                    >
+                      <Card el={el} />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex flex-wrap flex-col md:flex-row flex-1 bg-gradient-to-t from-white to-[#FFB8B2] md:items-start items-center justify-center">
+                <Lottie
+                  loop={true}
+                  animationData={loading}
+                  style={{
+                    height: 340,
+                    aspectRatio: "1/1",
+                  }}
+                  className="m-auto rounded-xl p-5"
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

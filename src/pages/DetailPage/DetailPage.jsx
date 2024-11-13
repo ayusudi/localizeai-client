@@ -28,7 +28,7 @@ export default function DetailPage() {
               },
             }}
           >
-            {data.images.map((el, i) => (
+            {data?.images?.slice(0, 4).map((el, i) => (
               <img
                 key={i}
                 src={"https://images.weserv.nl/?url=" + el}
@@ -60,7 +60,7 @@ export default function DetailPage() {
             <p className="text-body-lg mt-1">{format(data.plus_code)}</p>
           </div>
           <div className="overflow-x-auto flex gap-2 no-scrollbar">
-            {data.categories.map((el) => (
+            {data?.categories?.map((el) => (
               <div
                 key={el}
                 className="w-fit py-1 px-2 rounded-xl bg-primary-100"
@@ -84,7 +84,7 @@ export default function DetailPage() {
         </div>
       </div>
       <div className="columns-2 md:columns-3 gap-4 py-4">
-        {data.pictures.map((picture, index) => (
+        {data?.images?.slice(5, 30).map((picture, index) => (
           <div key={index} className="mb-4 overflow-hidden">
             <img
               src={"https://images.weserv.nl/?url=" + picture}

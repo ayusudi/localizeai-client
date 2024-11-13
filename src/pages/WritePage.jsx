@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Carousel } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import fetchDetail from "../helpers/fetchDetail";
 import { format } from "../helpers/helperText";
 import Lottie from "lottie-react";
-import loading from "../assets/loading.json";
+import loading from "../assets/coffee.json";
+import { uploadFile } from "../helpers/uploadFile";
+import axios from "axios";
 
 const Component = ({ data }) => {
   return (
@@ -53,7 +55,7 @@ const Component = ({ data }) => {
                 key={i}
                 src={"https://images.weserv.nl/?url=" + el}
                 alt="cafe-jakarta-brew"
-                className="relative"
+                className="relative object-cover"
               />
             );
           })}
@@ -64,6 +66,11 @@ const Component = ({ data }) => {
 };
 
 export default function WritePage() {
+  const imagePreviewRef = useRef(null);
+  const [errorMessage, setErrorMsg] = useState();
+  const [rawFile, setRawFile] = useState(null);
+  const [input, setInput] = useState("");
+  const [star, setStar] = useState(0);
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(true);
   const { id } = useParams();
@@ -78,6 +85,51 @@ export default function WritePage() {
         console.log(err);
       });
   }, []);
+
+  const handleChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      imagePreviewRef.current.src = URL.createObjectURL(file);
+    }
+    setRawFile(file);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!star || !input || !rawFile) {
+        throw "Review, rating and image are required.";
+      }
+      let result = await uploadFile("reviews", rawFile);
+      let { data } = await axios({
+        method: "POST",
+        url: `http://localhost:3000/api/v1/places/${id}/reviews`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          rating: star,
+          review: input,
+          images: [result],
+        },
+      });
+      console.log(data);
+
+      if (!data) {
+        throw {};
+      }
+      setErrorMsg();
+      navigate(`/places/${id}/write-success`);
+    } catch (error) {
+      if (typeof error === "string") setErrorMsg(error);
+      else
+        setErrorMsg(
+          "Something went wrong. We are currently under maintenance."
+        );
+    }
+  };
 
   return (
     <div className=" page flex flex-col pb-6">
@@ -111,14 +163,16 @@ export default function WritePage() {
             style={{
               height: 300,
               aspectRatio: "4/2",
-              background: "white",
             }}
             className="m-auto rounded-xl p-5"
           />
         ) : (
           <Component data={data} />
         )}
-        <form className="flex-1 bg-white w-full flex justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 bg-white w-full flex justify-center"
+        >
           <div className="max-w-[600px] w-11/12  flex flex-col py-6 gap-4">
             <div>
               <h1 className="text-heading-xl">Share Your Experience</h1>
@@ -127,18 +181,50 @@ export default function WritePage() {
               </p>
             </div>
             <div className="flex justify-around">
-              <button className="text-lg">😠</button>
-              <button className="text-lg">🙁</button>
-              <button className="text-lg">😐</button>
-              <button className="text-lg">🙂</button>
-              <button className="text-lg">🤩</button>
+              <button
+                type="button"
+                onClick={() => setStar(1)}
+                className={star >= 1 ? "text-lg" : "text-lg opacity-75"}
+              >
+                😠
+              </button>
+              <button
+                type="button"
+                onClick={() => setStar(2)}
+                className={star >= 2 ? "text-lg" : "text-lg opacity-75"}
+              >
+                🙁
+              </button>
+              <button
+                type="button"
+                onClick={() => setStar(3)}
+                className={star >= 3 ? "text-lg" : "text-lg opacity-75"}
+              >
+                😐
+              </button>
+              <button
+                type="button"
+                onClick={() => setStar(4)}
+                className={star >= 4 ? "text-lg" : "text-lg opacity-75"}
+              >
+                🙂
+              </button>
+              <button
+                type="button"
+                onClick={() => setStar(5)}
+                className={star >= 5 ? "text-lg" : "text-lg opacity-75"}
+              >
+                🤩
+              </button>
             </div>
             <textarea
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
               rows={10}
               placeholder="Review Text"
               className="rounded-lg h-[300px] max-h-[300px] border-[#D9D9D9] outline-none ring-0 ring-offset-0 shadow-none focus:border-[#D9D9D9] focus:ring-transparent"
             ></textarea>
-            <div className="m-auto h-40 w-full border rounded-xl flex flex-col justify-center gap-3 sm:gap-2.5 items-center">
+            <div className=" m-auto h-40 w-full border rounded-xl flex flex-col justify-center gap-3 sm:gap-2.5 items-center">
               <p className="text-body-lg text-gray-500 w-10/12 text-center">
                 Add photos to make your review more helpful.
               </p>
@@ -148,14 +234,30 @@ export default function WritePage() {
               >
                 Upload an Image
               </label>
-              <input id="dropzone-file" type="file" className="hidden" />
+              <input
+                onChange={handleChange}
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+              />
             </div>
+            <img
+              className={rawFile ? "" : "hidden"}
+              ref={imagePreviewRef}
+              id="imagePreview"
+              alt="Preview"
+            />
             <button
-              onClick={() => navigate("/places/123/write-success")}
+              type="submit"
               className="text-heading-md p-3 rounded-full text-white bg-primary mt-2 w-5/6 max-w-80 m-auto"
             >
               Submit Review
             </button>
+            {errorMessage ? (
+              <p className="text-center text-primary text-body-sm">
+                {errorMessage}
+              </p>
+            ) : null}
           </div>
         </form>
       </div>

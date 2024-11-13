@@ -21,17 +21,7 @@ import ReviewPage from "./pages/DetailPage/ReviewPage.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
 import NewPlacePage from "./pages/NewPlacePage.jsx";
 import FailedPage from "./pages/FailedPage.jsx";
-
-//  /
-//  /register
-//  /search
-//  /search?q=
-//  /explore
-// /places/:slug
-// /places/:slug/reviews
-// component request access
-// component form review
-// component success
+import SuccessPlacePage from "./pages/SuccessPlacePAge.jsx";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +98,10 @@ const router = createBrowserRouter([
         element: <FailedPage />,
       },
       {
+        path: "places/success",
+        element: <SuccessPlacePage />,
+      },
+      {
         path: "places/:id",
         element: <LayoutDetail />,
         children: [
@@ -116,12 +110,11 @@ const router = createBrowserRouter([
             element: <DetailPage />,
           },
           {
-            path: "review",
+            path: "reviews",
             element: <ReviewPage />,
           },
         ],
       },
-
       {
         path: "places/:id/write-review",
         element: <WritePage />,
@@ -140,10 +133,6 @@ const router = createBrowserRouter([
         path: "places/:id/write-success",
         element: <SuccessPage />,
       },
-      // {
-      //   path: "profile",
-      //   element: <ProfilePage />,
-      // },
     ],
   },
 ]);

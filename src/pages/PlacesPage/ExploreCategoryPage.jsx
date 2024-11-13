@@ -1,21 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Card from "../../components/Card";
-import { DataContext } from "../../Contexts"; // Import the DataContext
 import { useParams } from "react-router-dom";
 import axios from "axios";
-function SlideCard({ keyname }) {
-  const { explores } = useContext(DataContext) || {}; // Consume the context
-  return (
-    <div className="overflow-x-auto flex gap-4 no-scrollbar h-[380px] px-4 pb-3 pt-1">
-      {explores[keyname] &&
-        explores[keyname].slice(0, 8).map((el, i) => (
-          <div key={i} className="w-fit">
-            <Card el={el} />
-          </div>
-        ))}
-    </div>
-  );
-}
+import Lottie from "lottie-react";
+import loading from "../../assets/loading.json";
 
 export default function ExplorePage() {
   let { category } = useParams();
@@ -58,11 +46,12 @@ export default function ExplorePage() {
     setPlaceHolder(find);
     axios
       .get(
-        "https://localizeai-server-da6245e547aa.herokuapp.com/cafes/cateegory?q=" +
-          find.key
+        import.meta.env.VITE_BASEURL +
+          "/api/v1/places?category=" +
+          find.underscore
       )
       .then((res) => {
-        setData(res.data);
+        setData(res.data.data);
       });
   }, []);
 
@@ -73,11 +62,21 @@ export default function ExplorePage() {
           <h2 className="text-heading-lg">{placeholder.placeholder}</h2>
         </div>
       </div>
-      <div className="flex flex-wrap items-around justify-between gap-3 md:gap-5 w-full px-5">
-        {data?.map((el) => (
-          <Card el={el} key={el._id} />
-        ))}
-      </div>
+      {data.length ? (
+        <div className="flex flex-wrap items-around justify-between gap-3 md:gap-5 w-full px-5">
+          {data?.map((el) => (
+            <Card el={el} key={el._id} />
+          ))}
+        </div>
+      ) : (
+        <div className="md:w-5/6 max-w-[480px] m-auto">
+          <Lottie
+            loop={true}
+            animationData={loading}
+            className="m-auto rounded-xl p-5 "
+          />
+        </div>
+      )}
     </div>
   );
 }

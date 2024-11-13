@@ -1,10 +1,39 @@
 import { useState } from "react";
 import SwitchIcon from "../../components/SwitchIcon";
 import { useNavigate } from "react-router-dom";
+import { uploadFile } from "../../helpers/uploadFile";
 
 export default function SearchPage() {
   const navigate = useNavigate();
+  const [input, setInput] = useState("");
+  const [nameFile, setNameFile] = useState("Upload an Image");
   const [checkStatus, setCheckStatus] = useState(false);
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setNameFile(file.name);
+    let result = await uploadFile("places", file);
+    navigate("/places/search", {
+      state: {
+        search: "image",
+        data: {
+          image_url: result,
+        },
+      },
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate("/places/search", {
+      state: {
+        search: "text",
+        data: {
+          q: input,
+        },
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col flex-grow">
       <div className="flex-1 flex flex-col items-center justify-center gap-2">
@@ -53,7 +82,7 @@ export default function SearchPage() {
         </div>
         <div className="w-full ">
           {checkStatus ? (
-            <form className="m-auto h-40 w-5/6 max-w-[360px] border rounded-xl flex flex-col justify-center gap-3 sm:gap-2.5 items-center">
+            <div className="m-auto h-40 w-5/6 max-w-[360px] border rounded-xl flex flex-col justify-center gap-3 sm:gap-2.5 items-center">
               <p className="text-body-lg text-gray-500 w-10/12 text-center">
                 Upload an image, and we'll help find similar places.
               </p>
@@ -61,18 +90,24 @@ export default function SearchPage() {
                 htmlFor="dropzone-file"
                 className="cursor-pointer w-5/6 text-heading-md py-2.5 px-3 rounded-full text-white bg-primary text-center"
               >
-                Upload an Image
+                {nameFile}
               </label>
-              <input id="dropzone-file" type="file" className="hidden" />
-            </form>
+              <input
+                onChange={handleFileChange}
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+              />
+            </div>
           ) : (
             <form
-              action="/places/search"
-              method="get"
+              onSubmit={handleSubmit}
               className="m-auto h-40 w-5/6 max-w-[360px]"
             >
               <div className="flex items-center border rounded-full p-1">
                 <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
                   name="q"
                   className="flex-grow !outline-none ring-0 border-0 focus:!outline-none !ring-white focus:ring-offset-0"
                   type="text"

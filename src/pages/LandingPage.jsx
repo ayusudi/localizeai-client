@@ -43,7 +43,7 @@ export default function LandingPage() {
     const containerCenter = container.offsetWidth / 2; // Center of the viewport
 
     // Update card keys based on their position relative to the viewport center
-    const updatedKeys = Array.from(container.children).map((card) => {
+    const updatedKeys = Array.from(container.children)?.map((card) => {
       const cardRect = card.getBoundingClientRect();
       const cardCenter = (cardRect.left + cardRect.right) / 2;
       const distanceToCenter = cardCenter - containerCenter;
@@ -118,7 +118,7 @@ export default function LandingPage() {
     <div className="relative">
       {!localStorage.getItem("FirstTime") && (
         <div className="z-50 page splash absolute bg-primary flex justify-items-center items-center">
-          <img src="logo-text.png" className="m-auto " />
+          <img src="logo-text.png" className="m-auto object-cover " />
         </div>
       )}
       <div className="page overflow-hidden flex flex-col ">
@@ -141,7 +141,7 @@ export default function LandingPage() {
               modules={[EffectCoverflow, Pagination]}
               className="mySwiper"
             >
-              {explores["work_friendly"].map((el, i) => (
+              {explores["work_friendly"]?.map((el, i) => (
                 <SwiperSlide key={i}>
                   <Card el={el} />
                 </SwiperSlide>
@@ -157,7 +157,7 @@ export default function LandingPage() {
             className="hidden md:flex overflow-x-scroll gap-5 p-4 no-scrollbar justify-center items-center bg-gradient-to-t from-white to-[#FFB8B2]"
           >
             {explores.work_friendly &&
-              explores.work_friendly.map((el, i) => {
+              explores.work_friendly?.map((el, i) => {
                 const cardKey = cardKeys[i];
 
                 return (

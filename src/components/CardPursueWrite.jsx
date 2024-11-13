@@ -4,7 +4,7 @@ export default function CardPursueWrite({ setIsShow }) {
   const { id } = useParams();
   const navigate = useNavigate();
   return (
-    <div className="bg-white w-full flex flex-col rounded-2xl gap-4 items-center pb-6">
+    <div className="bg-white w-full flex flex-col rounded-2xl gap-4 md:gap-5 items-center pb-6 md:pb-12">
       <div className="flex flex-col items-center w-full">
         <button onClick={() => setIsShow(false)} className="self-end m-4">
           <svg
